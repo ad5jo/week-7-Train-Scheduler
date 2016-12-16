@@ -5,10 +5,10 @@
 // and Heroku to host your finished site
 
 // Initial Values
-var train-name = "";
+var train_name = "";
 var destination = "";
-var first-train-time = 0;
-var train-frequency = "";
+var first_train_time = 0;
+var train_frequency = "";
 
 
 src="https://www.gstatic.com/firebasejs/3.6.4/firebase.js"
@@ -23,7 +23,7 @@ src="https://www.gstatic.com/firebasejs/3.6.4/firebase.js"
   };
 
   firebase.initializeApp(config);
-      firebase.initializeApp(config);
+
 
       // Create a variable to reference the database
       var database = firebase.database();
@@ -52,17 +52,17 @@ $("#id-button-submit").click(
         // YOUR TASK!!!
         // Code in the logic for storing and retrieving the most recent user.
         // Don't forget to provide initial data to your Firebase database.
-        train-name = $("#n-train-name").val().trim();
-        destination = $("#n-destination").val().trim();
-        first-train-time = $("#n-first-train-time").val().trim();
-        train-frequency = $("#n-train-frequency").val().trim();
+        train_name = $("#n_train_name").val().trim();
+        destination = $("#n_destination").val().trim();
+        first_train_time = $("#n_first_train_time").val().trim();
+        train_frequency = $("#n_train_frequency").val().trim();
 
 
         database.ref().set({
-          train-name: train-name,
+          train_name: train_name,
           destination: destination,
-          first-train-time: first-train-time,
-          train-frequency: train-frequency
+          first_train_time: first_train_time,
+          train_frequency: train_frequency
         });
 
         // Don't refresh the page!
