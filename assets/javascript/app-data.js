@@ -1,208 +1,113 @@
 // Dave Durkee
-// 11.20.2016
+// 12.10.2016
+// Firebase to store data: https://ddurkee0-train.firebaseio.com/
+// GitHub to backup your project, 
+// and Heroku to host your finished site
 
-  var question_index = 0;
-  var missed = 0;
-  var correct = 0;
-  var i_seconds_remaining = 30;
-  var o_timer = 0;
-  var the_correct_answer = -1;
+// Initial Values
+var train-name = "";
+var destination = "";
+var first-train-time = 0;
+var train-frequency = "";
+
+
+src="https://www.gstatic.com/firebasejs/3.6.4/firebase.js"
+
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyD8fP7Z1VVH8sJLlOQzEYjiBSFJyP-eKjA",
+    authDomain: "ddurkee0-train.firebaseapp.com",
+    databaseURL: "https://ddurkee0-train.firebaseio.com",
+    storageBucket: "ddurkee0-train.appspot.com",
+    messagingSenderId: "382896722508"
+  };
+
+  firebase.initializeApp(config);
+      firebase.initializeApp(config);
+
+      // Create a variable to reference the database
+      var database = firebase.database();
+
+
+
 
 
 $(document).ready(function(){
-  function_reset_game_variables();
-  function_display_initial_screen();
+  function_init();
 });
 
 
-  function function_display_initial_screen ()
-  {
-        $("#button_begin").click(
+
+$("#id-button-submit").click(
       function(){
-        $("#q1").remove();
-        $("#a1").remove();
-        $("#play_again_button").remove();
-        $("#game_status").remove();
-        $("#correct_answer_id").remove();
-        $("#message_missed").remove();
-        $("#thebody").append("<div id=" + "game_status" + ">" + "You will have 30 seconds to answer each question" + "</div>");
- 
+        $("#debug").append("<div id=" + "game_status" + ">" + "Hello" + "</div>");
+        // $("#message_missed").remove();
+        // $("#thebody").append("<div id=" + "game_status" + ">" + "You will have 30 seconds" + "</div>");
+      });
+
+      // Capture Button Click
+      $("#id-button-submit").on("click", 
+        function() {
+
+        // YOUR TASK!!!
+        // Code in the logic for storing and retrieving the most recent user.
+        // Don't forget to provide initial data to your Firebase database.
+        train-name = $("#n-train-name").val().trim();
+        destination = $("#n-destination").val().trim();
+        first-train-time = $("#n-first-train-time").val().trim();
+        train-frequency = $("#n-train-frequency").val().trim();
+
+
+        database.ref().set({
+          train-name: train-name,
+          destination: destination,
+          first-train-time: first-train-time,
+          train-frequency: train-frequency
+        });
+
+        // Don't refresh the page!
+        return false;
       });
 
 
-  function_next_question();
+
+
+  function function_init ()
+  {
+        $("#button_begin").click(
+        function(){
+          $("#q1").remove();
+          $("#a1").remove();
+          $("#play_again_button").remove();
+          $("#game_status").remove();
+          $("#correct_answer_id").remove();
+          $("#message_missed").remove();
+          $("#thebody").append("<div id=" + "game_status" + ">" + "You will have 30 seconds to answer each question" + "</div>");
+      });
+
+
+  function_next();
   }
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 
-  var questions = [
-  {
-    question: "What is the name of the actor who played Captain Kirk?",
-    choices: ["William Shatner","Richard Lutz","David Eddings"],
-    correctAnswer: 0
-  }, 
-//var i_correct_number = questions[question_index].correctAnswer
-  {
-    question: "What is the name of the actor who played Spock?",
-    choices: ["Gene Roddenberry","DeForest Kelley","Leonard Nimoy"],
-    correctAnswer: 2
-  }, 
-  {
-    question: "What is the name of the actor who played McCoy",
-    choices: ["Gene Roddenberry","DeForest Kelley","Leonard Nimoy"],
-    correctAnswer: 1
-  }
-  ];
-
   
 
-function function_timeout_question()
+
+function function_next()
 {
-  
-  if (i_seconds_remaining === 0)
-  {
-    $("#game_status").text("--- Time Ran Out ---");
-    $("#thebody").append("<div id=" + "message_missed" + ">" + "Missed "+ question_index +" one" + "</div>");
-    question_index++;
-    missed++;
-  }
-  else
-  {
-    i_seconds_remaining--;
-    $("#game_status").text(" Time remaining: " + i_seconds_remaining);
-    var i_ms =  1000;
-    o_timer = setTimeout(function_timeout_question, i_ms);
-  }
-}
+  // 1. 
+  o_timer = 0;
+} // end function next 
 
 
-function function_next_question()
+
+
+
+
+function function_reset_variables()
 {
-  // 1. clear the last question
-  // 2. post the next
-  // 3. create next question button
-  // 4. register the next question event click
-  // 5. start the timer
-
-  // 1.
-  $("#q1").remove();
-  $("#play_again_button").remove();
-  $("#a1").remove();
-  $("#correct_answer_id").remove();
-  $("#next_question_button").remove();
-  $("#message_missed").remove();
-
-
-    //var i_max = questions.lenght();
-
-    if (question_index > 2 )
-    {
-      function_game_over();
-    }
-
-
-  // 2.
-          $("#button_begin").hide();
-          $("#thebody").append("<div id=" + "q1" + ">" + questions[question_index].question + "</div>");
-
-          var s_radio_buttons = 
-          "<div id=" + "a1" + ">" +
-          '<INPUT TYPE="Radio" name="answer" value="1">1: ' + questions[question_index].choices[0] + "  " +
-          '<INPUT TYPE="Radio" name="answer" value="2">2: '+ questions[question_index].choices[1] +"  " +
-          '<INPUT TYPE="Radio" name="answer" value="3">3: ' + questions[question_index].choices[2] +"  " +
-          "</div>";
-
-          $("#thebody").append(s_radio_buttons);
-
-  // 3.
-          var s_done_button = "<a class=\"btn btn-primary btn-sm\" id=\"next_question_button\" role=\"button\">Next Question</a> ";
-          $("#thebody").append(s_done_button);
-
-
-
-  // 4.
-      $("#next_question_button").click(
-      function(){
-        // 1. clear the timer
-        // 2. get the value of the radio button
-        // 3. check the answer for correct or incorrect (missed++ or correct++)
-        // 4. if incorrect then display the correct answer
-        // 5. if correct display the next question
-
-        // 1.
-        clearTimeout(o_timer);
-        i_seconds_remaining = 30;
-
-        // 2.
-        var s_i_val = $('input[name="answer"]:checked').val();
-        var i_val = parseInt(s_i_val, 10);
-        i_val--;
-        // 3.
-        var i_correct_number = questions[question_index].correctAnswer
-        if (i_val === i_correct_number)
-        {
-          correct++;
-        }
-        else
-        {
-          missed++;
-          $("#thebody").append("<div id=correct_answer_id >" + "The correct answer was " + i_correct) + "</div>";
-        }
-
-        question_index++;
-
-
-        if (i_val === i_correct_number)
-        {
-          function_next_question();
-        }
-        else // incorrect
-        {
-          setTimeout(function_next_question, 3000)
-        }
-        
-      });// end of $("#next_question_button").click
-
-      var i_correct = 1 + questions[question_index].correctAnswer
-      the_correct_answer = i_correct;
-
-  // 5.
-      o_timer = setTimeout(function_timeout_question, 1000);
-      // not here question_index++;
-} // end function next question
-
-
-
-function function_game_over()
-{
-  // display game over
-  // show score
-  // add play again button
-  // resister on click event for play again
-
-  $("#game_status").text("Game over");
-  $("#thebody").append("<div id=correct_answer_id >" + "Your score is " + correct) + "</div>";
-
-  var s_play_again_button = "<a class=\"btn btn-primary btn-sm\" id=\"play_again_button\" role=\"button\">Play Again</a> ";
-  $("#thebody").append(s_play_again_button);
-
-
-
-  $("#play_again_button").click(
-    function(){
-    function_reset_game_variables();
-    function_display_initial_screen();
-
-  });// end of $("#play_again_button").click
-
-}
-
-function function_reset_game_variables()
-{
-  question_index = 0;
-  missed = 0;
-  correct = 0;
-  i_seconds_remaining = 30;
   o_timer = 0;
 }
+
 
